@@ -17,7 +17,7 @@ This extension provides a convenient way to find, navigate, and copy all Spring 
 ## Usage
 
 ### Find Endpoints
-![Find Endpoints](https://raw.githubusercontent.com/lijunjie1991/vscode-spring-endpoints/refs/heads/main/images/find-endpoints.png)
+![Find Endpoints](https://raw.githubusercontent.com/lijunjie1991/vscode-spring-endpoints/refs/heads/main/images/find_endpoints.png)
 
 1. Open the Command Palette in VS Code by pressing `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS).
 2. Type "Find Endpoints" and select "Spring Find Endpoints: Search Endpoints" from the dropdown list.
@@ -25,8 +25,8 @@ This extension provides a convenient way to find, navigate, and copy all Spring 
 4. You can also trigger the search by pressing `Ctrl+\` (Windows/Linux) or `Cmd+\` (macOS).
 
 ### Copy API URL
-![Copy API URL](https://raw.githubusercontent.com/lijunjie1991/vscode-spring-endpoints/refs/heads/main/images/copy-api-url.png)
-![Copy API URL](https://raw.githubusercontent.com/lijunjie1991/vscode-spring-endpoints/refs/heads/main/images/copy-api-url-2.png)
+![Copy API URL](https://raw.githubusercontent.com/lijunjie1991/vscode-spring-endpoints/refs/heads/main/images/copy_url1.png)
+![Copy API URL](https://raw.githubusercontent.com/lijunjie1991/vscode-spring-endpoints/refs/heads/main/images/copy_url2.png)
 
 1. Open a Java file in VS Code.
 2. Right-click on a line in the file where an endpoint is defined.

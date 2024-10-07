@@ -2,7 +2,7 @@
   "name": "spring-endpoints",
   "displayName": "Spring endpoints",
   "description": "A VS Code extension to find, navigate, and copy your spring endpoints url in your project.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "JunjieLi",
   "keywords": [
     "spring",
