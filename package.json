@@ -1,0 +1,71 @@
+{
+  "name": "spring-endpoints",
+  "displayName": "Spring endpoints",
+  "description": "A VS Code extension to find, navigate, and copy your spring endpoints url in your project.",
+  "version": "0.0.1",
+  "publisher": "JunjieLi",
+  "engines": {
+    "vscode": "^1.91.1"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "spring-find-endpoints.searchEndpoints",
+        "title": "Find Endpoints"
+      },
+      {
+        "command": "spring-find-endpoints.copyApiUrl",
+        "title": "Copy API URL"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "spring-find-endpoints.searchEndpoints",
+        "key": "cmd+\\"
+      },
+      {
+        "command": "spring-find-endpoints.searchEndpoints",
+        "key": "ctrl+\\"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "spring-find-endpoints.copyApiUrl",
+          "when": "editorTextFocus",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.91.1",
+    "@types/mocha": "^10.0.8",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "eslint": "^9.11.1",
+    "typescript": "^5.6.2",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
