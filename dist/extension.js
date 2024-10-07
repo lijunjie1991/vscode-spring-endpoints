@@ -1,1 +1,199 @@
-(()=>{"use strict";var t={265:function(t,e,n){var i=this&&this.__createBinding||(Object.create?function(t,e,n,i){void 0===i&&(i=n);var o=Object.getOwnPropertyDescriptor(e,n);o&&!("get"in o?!e.__esModule:o.writable||o.configurable)||(o={enumerable:!0,get:function(){return e[n]}}),Object.defineProperty(t,i,o)}:function(t,e,n,i){void 0===i&&(i=n),t[i]=e[n]}),o=this&&this.__setModuleDefault||(Object.create?function(t,e){Object.defineProperty(t,"default",{enumerable:!0,value:e})}:function(t,e){t.default=e}),s=this&&this.__importStar||function(t){if(t&&t.__esModule)return t;var e={};if(null!=t)for(var n in t)"default"!==n&&Object.prototype.hasOwnProperty.call(t,n)&&i(e,t,n);return o(e,t),e};Object.defineProperty(e,"__esModule",{value:!0}),e.activate=function(t){console.log('Congratulations, your extension "spring-find-endpoints" is now active!');const e=r.commands.registerCommand("spring-find-endpoints.searchEndpoints",(async()=>{const t=await a();if(t.length>0){const e=await r.window.showQuickPick(t.map((t=>t.label)),{placeHolder:"Select an endpoint to jump to"});if(e){const n=t.find((t=>t.label===e));if(n){const t=r.Uri.file(n.file),e=new r.Position(n.line,0),i=new r.Range(e,e),o=await r.window.showTextDocument(t);o.selection=new r.Selection(i.start,i.start),o.revealRange(i)}}}else r.window.showInformationMessage("No endpoints found.")}));t.subscriptions.push(e);const n=r.commands.registerCommand("spring-find-endpoints.copyApiUrl",(async()=>{const t=r.window.activeTextEditor;if(t){const e=t.selection.active.line,n=t.document.fileName,i=(await a()).find((t=>t.line===e&&t.file===n));i?(await r.env.clipboard.writeText(i.apiPath),r.window.showInformationMessage(`Copied API URL: ${i.apiPath}`)):r.window.showErrorMessage("No API URL found for this line in the current file.")}}));t.subscriptions.push(n)},e.deactivate=function(){};const r=s(n(398));async function a(){const t=[],e=await r.workspace.findFiles("**/*.java");for(const n of e){const e=(await r.workspace.fs.readFile(n)).toString(),i=/@RequestMapping\(["']([^"']+)["']\)/g,o=/@(GetMapping|PostMapping|PutMapping|DeleteMapping|RequestMapping)\(["']([^"']+)["']\)/g;let s,a="";const l=new Set;for(;null!==(s=i.exec(e));){a=s[1];let t=e.substring(0,s.index).split("\n").length,n=s.index+s[0].length,i=e.substring(n,e.indexOf("\n",n+1)).trimStart();for(;i.startsWith("@")||""===i.trim();)t++,n+=i.length+1,i=e.substring(n,e.indexOf("\n",n+1)).trimStart();l.add(t)}let c;for(;null!==(c=o.exec(e));){let i=e.substring(0,c.index).split("\n").length,o=c.index+c[0].length,s=e.substring(o,e.indexOf("\n",o+1)).trimStart();for(;s.startsWith("@");)i++,o+=s.length+1,s=e.substring(o,e.indexOf("\n",o+1)).trimStart();if(!l.has(i)){let e="";e=a.endsWith("/")||c[2].startsWith("/")?a+c[2]:`${a}/${c[2]}`,t.push({label:`${e} (${n.fsPath.split("/").pop()}:${i+1})`,file:n.fsPath,line:i,apiPath:e})}}}return t.sort(((t,e)=>t.label.localeCompare(e.label)))}},398:t=>{t.exports=require("vscode")}},e={},n=function n(i){var o=e[i];if(void 0!==o)return o.exports;var s=e[i]={exports:{}};return t[i].call(s.exports,s,s.exports,n),s.exports}(265);module.exports=n})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ([
+/* 0 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.activate = activate;
+exports.deactivate = deactivate;
+// The module 'vscode' contains the VS Code extensibility API
+// Import the module and reference it with the alias vscode in your code below
+const vscode = __importStar(__webpack_require__(1));
+// This method is called when your extension is activated
+// Your extension is activated the very first time the command is executed
+function activate(context) {
+    // Use the console to output diagnostic information (console.log) and errors (console.error)
+    // This line of code will only be executed once when your extension is activated
+    console.log('Congratulations, your extension "spring-find-endpoints" is now active!');
+    const disposableSearch = vscode.commands.registerCommand("spring-find-endpoints.searchEndpoints", async () => {
+        const endpoints = await searchForEndpoints();
+        if (endpoints.length > 0) {
+            const selected = await vscode.window.showQuickPick(endpoints.map((ep) => ep.label), { placeHolder: "Select an endpoint to jump to" });
+            if (selected) {
+                const endpoint = endpoints.find((ep) => ep.label === selected);
+                if (endpoint) {
+                    const uri = vscode.Uri.file(endpoint.file);
+                    const position = new vscode.Position(endpoint.line, 0);
+                    const range = new vscode.Range(position, position);
+                    const editor = await vscode.window.showTextDocument(uri);
+                    editor.selection = new vscode.Selection(range.start, range.start);
+                    editor.revealRange(range);
+                }
+            }
+        }
+        else {
+            vscode.window.showInformationMessage("No endpoints found.");
+        }
+    });
+    context.subscriptions.push(disposableSearch);
+    // Register the context menu command for copying API URL
+    const disposableCopyUrl = vscode.commands.registerCommand("spring-find-endpoints.copyApiUrl", async () => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const line = editor.selection.active.line; // Get the current line number
+            const file = editor.document.fileName; // Get the current file name
+            const endpoints = await searchForEndpoints(); // Get the endpoints again
+            // Find the endpoint that matches the current file and line number
+            const endpoint = endpoints.find((ep) => ep.line === line && ep.file === file);
+            if (endpoint) {
+                await vscode.env.clipboard.writeText(endpoint.apiPath);
+                vscode.window.showInformationMessage(`Copied API URL: ${endpoint.apiPath}`);
+            }
+            else {
+                vscode.window.showErrorMessage("No API URL found for this line in the current file.");
+            }
+        }
+    });
+    context.subscriptions.push(disposableCopyUrl);
+}
+// Function to search for endpoints in the workspace
+async function searchForEndpoints() {
+    const endpoints = [];
+    const files = await vscode.workspace.findFiles("**/*.java"); // Adjust the pattern as needed
+    for (const file of files) {
+        const content = await vscode.workspace.fs.readFile(file);
+        const text = content.toString();
+        const classRegex = /@RequestMapping\(["']([^"']+)["']\)/g;
+        const methodRegex = /@(GetMapping|PostMapping|PutMapping|DeleteMapping|RequestMapping)\(["']([^"']+)["']\)/g;
+        let classMatch;
+        let classPath = "";
+        // Record the class definition line to prevent duplicate additions
+        const linesWithClassMapping = new Set();
+        // Find class-level mapping
+        while ((classMatch = classRegex.exec(text)) !== null) {
+            classPath = classMatch[1];
+            let classLine = text.substring(0, classMatch.index).split("\n").length;
+            let nextLineIndex = classMatch.index + classMatch[0].length;
+            // Content of next line
+            let nextLine = text
+                .substring(nextLineIndex, text.indexOf("\n", nextLineIndex + 1))
+                .trimStart();
+            // Filter out blank lines and annotation lines, directly locating the class definition line
+            while (nextLine.startsWith("@") || nextLine.trim() === "") {
+                classLine++;
+                nextLineIndex += nextLine.length + 1;
+                nextLine = text
+                    .substring(nextLineIndex, text.indexOf("\n", nextLineIndex + 1))
+                    .trimStart();
+            }
+            linesWithClassMapping.add(classLine);
+        }
+        let methodMatch;
+        while ((methodMatch = methodRegex.exec(text)) !== null) {
+            let methodLine = text.substring(0, methodMatch.index).split("\n").length;
+            let nextLineIndex = methodMatch.index + methodMatch[0].length;
+            // content of next line
+            let nextLine = text
+                .substring(nextLineIndex, text.indexOf("\n", nextLineIndex + 1))
+                .trimStart();
+            // Filter out blank lines and annotation lines, directly locating the method definition line
+            while (nextLine.startsWith("@")) {
+                methodLine++;
+                nextLineIndex += nextLine.length + 1;
+                nextLine = text
+                    .substring(nextLineIndex, text.indexOf("\n", nextLineIndex + 1))
+                    .trimStart();
+            }
+            // Only add the method mapping if its line is not in the linesWithClassMapping set
+            if (!linesWithClassMapping.has(methodLine)) {
+                let fullPath = "";
+                if (classPath.endsWith("/") || methodMatch[2].startsWith("/")) {
+                    fullPath = classPath + methodMatch[2];
+                }
+                else {
+                    fullPath = `${classPath}/${methodMatch[2]}`;
+                }
+                endpoints.push({
+                    label: `${fullPath} (${file.fsPath.split("/").pop()}:${methodLine + 1})`,
+                    file: file.fsPath,
+                    line: methodLine,
+                    apiPath: fullPath,
+                });
+            }
+        }
+    }
+    return endpoints.sort((a, b) => a.label.localeCompare(b.label));
+}
+// This method is called when your extension is deactivated
+function deactivate() { }
+
+
+/***/ }),
+/* 1 */
+/***/ ((module) => {
+
+module.exports = require("vscode");
+
+/***/ })
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(0);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
+/******/ })()
+;
+//# sourceMappingURL=extension.js.map
